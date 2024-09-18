@@ -1,0 +1,74 @@
+#include <stdio.h>
+
+#define SIZE 100
+
+typedef struct job {
+    int dur;
+    int dead;
+} job;
+
+int com(job j1, job j2) {
+    if(j1.dead!=j2.dead)
+    {
+    return j1.dead - j2.dead;
+    }
+    return j1.dur-j2.dur;
+}
+
+void sort(job j[], int n) {
+    for (int i = 0; i < n - 1; i++) {
+        for (int x = 0; x < n - 1 - i; x++) {
+            if (com(j[x], j[x + 1]) > 0) {
+                job temp = j[x];
+                j[x] = j[x + 1];
+                j[x + 1] = temp;
+            }
+        }
+    }
+}
+
+void min_max(int dur[], int dead[], int n) {
+    job j[SIZE];
+    
+    for (int i = 0; i < n; i++) {
+        j[i].dur = dur[i];
+        j[i].dead = dead[i];
+    }
+    
+    sort(j, n);
+    
+    int cur_t = 0;
+    int max_lateness = 0;
+
+    for (int b = 0; b < n; b++) {
+        cur_t += j[b].dur;
+        int lateness = cur_t - j[b].dead;
+        if (lateness >0) {
+            max_lateness += lateness;
+        }
+    }
+    printf("%d",max_lateness);
+    
+   
+}
+
+int main() {
+    int n = 6;  
+    int dur[SIZE];
+    int dead[SIZE];
+
+   
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &dur[i]);
+    }
+
+
+    for (int j = 0; j < n; j++) {
+        scanf("%d", &dead[j]);
+    }
+    
+
+    min_max(dur, dead, n);
+    
+    return 0;
+}
